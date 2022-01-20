@@ -8,14 +8,14 @@ instance AutoRoute StaticController
 instance AutoRoute DevicesController
 
 instance HasPath DevicesController where
-    pathTo DevicesAction = "Devices"
-    pathTo NewDeviceAction = "NewDevice"
-    pathTo ShowDeviceAction { deviceId } = "ShowDevice" ++ tshow deviceId
-    pathTo CreateDeviceAction = "CreateDevice"
-    pathTo EditDeviceAction { deviceId  } = "EditDevice" ++ tshow deviceId
-    pathTo UpdateDeviceAction { deviceId } = "UpdateDevice" ++ tshow deviceId
-    pathTo DeleteDeviceAction { deviceId } = "DeleteDevice" ++ tshow deviceId
-    pathTo CreatePairDeviceAction { pairingCode } = "/api/pairing-code" ++ tshow pairingCode
+    pathTo DevicesAction = "/Devices"
+    pathTo NewDeviceAction = "/NewDevice"
+    pathTo ShowDeviceAction { deviceId } = "/ShowDevice/" ++ tshow deviceId
+    pathTo CreateDeviceAction = "/CreateDevice"
+    pathTo EditDeviceAction { deviceId  } = "/EditDevice/" ++ tshow deviceId
+    pathTo UpdateDeviceAction { deviceId } = "/UpdateDevice/" ++ tshow deviceId
+    pathTo DeleteDeviceAction { deviceId } = "/DeleteDevice/" ++ tshow deviceId
+    pathTo CreatePairDeviceAction { pairingCode } = "/api/pairing-code/" ++ tshow pairingCode
 
 instance CanRoute DevicesController where
    parseRoute' = do
@@ -65,7 +65,7 @@ instance CanRoute DevicesController where
            endOfInput
            pure DeleteDeviceAction { deviceId }
 
-       let pairDevice = do
+       let createPairDeviceAction = do
            string "/api/pairing-code/"
            pairingCode <- parseText
            optional "/"
@@ -79,4 +79,4 @@ instance CanRoute DevicesController where
             <|> editDevice
             <|> updateDevice
             <|> deleteDevice
-            <|> pairDevice
+            <|> createPairDeviceAction

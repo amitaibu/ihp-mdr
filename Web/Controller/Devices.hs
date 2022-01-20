@@ -52,7 +52,7 @@ instance Controller DevicesController where
         setSuccessMessage "Device deleted"
         redirectTo DevicesAction
 
-    action CreatePairDeviceAction { pairingCode} = do
+    action CreatePairDeviceAction { pairingCode } = do
         -- @todo
         redirectTo DevicesAction
 
