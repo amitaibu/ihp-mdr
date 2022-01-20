@@ -5,6 +5,7 @@ import Web.View.Devices.Index
 import Web.View.Devices.New
 import Web.View.Devices.Edit
 import Web.View.Devices.Show
+import Web.Controller.Prelude (Device'(refreshToken))
 
 instance Controller DevicesController where
     action DevicesAction = do
@@ -13,7 +14,14 @@ instance Controller DevicesController where
         render IndexView { .. }
 
     action NewDeviceAction = do
+        pairingCode <- generateAuthenticationToken
+        token <- generateAuthenticationToken
+        refreshToken <- generateAuthenticationToken
         let device = newRecord
+                |> set #pairingCode (Just pairingCode)
+                |> set #token token
+                |> set #refreshToken refreshToken
+
         render NewView { .. }
 
     action ShowDeviceAction { deviceId } = do
@@ -53,9 +61,18 @@ instance Controller DevicesController where
         redirectTo DevicesAction
 
     action CreatePairDeviceAction { pairingCode } = do
-        -- @todo
-        redirectTo DevicesAction
+        device <- query @Device |> filterWhere (#pairingCode, Just pairingCode) |> fetchOne
+        renderJson (toJSON device)
+
+instance ToJSON Device where
+    toJSON device = object
+        [ "id" .= get #id device
+        , "name" .= get #name device
+        , "token" .= get #token device
+        , "refresh_token" .= get #refreshToken device
+        , "created_at" .= get #createdAt device
+        ]
 
 
 buildDevice device = device
-    |> fill @["token","pairingCode","refreshToken"]
+    |> fill @["name", "token","pairingCode","refreshToken"]

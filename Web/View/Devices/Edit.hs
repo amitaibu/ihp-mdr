@@ -17,9 +17,7 @@ instance View EditView where
 
 renderForm :: Device -> Html
 renderForm device = formFor device [hsx|
-    {(textField #token)}
-    {(textField #pairingCode)}
-    {(textField #refreshToken)}
+    {(textField #name)}
     {submitButton}
 
 |]
