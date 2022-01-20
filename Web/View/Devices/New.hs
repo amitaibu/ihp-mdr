@@ -18,7 +18,9 @@ instance View NewView where
 renderForm :: Device -> Html
 renderForm device = formFor device [hsx|
     {(textField #name)}
-    {(textField #pairingCode)}
+    {(hiddenField #token)}
+    {(hiddenField #pairingCode)}
+    {(hiddenField #refreshToken)}
     {submitButton}
 
 |]

@@ -62,17 +62,26 @@ instance Controller DevicesController where
 
     action CreatePairDeviceAction { pairingCode } = do
         device <- query @Device |> filterWhere (#pairingCode, Just pairingCode) |> fetchOne
+
+        -- Pairing can only happen once, so we need to remove the pairing code from the Device.
+        device <- device
+            |> set #pairingCode Nothing
+            |> updateRecord
+
         renderJson (toJSON device)
 
 instance ToJSON Device where
     toJSON device = object
-        [ "id" .= get #id device
-        , "name" .= get #name device
-        , "token" .= get #token device
-        , "refresh_token" .= get #refreshToken device
-        , "created_at" .= get #createdAt device
+        [ "data" .= object
+            [ "id" .= get #id device
+            , "device_id" .= get #name device
+            , "access_token" .= get #token device
+            , "refresh_token" .= get #refreshToken device
+            , "created_at" .= get #createdAt device
+            ]
         ]
 
 
 buildDevice device = device
-    |> fill @["name", "token","pairingCode","refreshToken"]
+    |> fill @["name", "pairingCode", "token", "refreshToken"]
+    |> validateField #name nonEmpty
