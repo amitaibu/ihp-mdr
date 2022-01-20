@@ -1,5 +1,6 @@
 module Web.View.Devices.Index where
 import Web.View.Prelude
+import Data.Maybe
 
 data IndexView = IndexView { devices :: [ Device ] , pagination :: Pagination }
 
@@ -31,9 +32,12 @@ instance View IndexView where
 renderDevice :: Device -> Html
 renderDevice device = [hsx|
     <tr>
-        <td>{device}</td>
+        <td>{get #name device} | {pairingCode}</td>
         <td><a href={ShowDeviceAction (get #id device)}>Show</a></td>
         <td><a href={EditDeviceAction (get #id device)} class="text-muted">Edit</a></td>
         <td><a href={DeleteDeviceAction (get #id device)} class="js-delete text-muted">Delete</a></td>
     </tr>
 |]
+    where
+        pairingCode =
+            fromMaybe "--Already paired--" (get #pairingCode device)
