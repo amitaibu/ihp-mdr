@@ -1,0 +1,1 @@
+ALTER TABLE devices ALTER COLUMN last_used DROP NOT NULL;
