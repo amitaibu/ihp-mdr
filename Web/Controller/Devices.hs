@@ -61,7 +61,10 @@ instance Controller DevicesController where
         redirectTo DevicesAction
 
     action CreatePairDeviceAction { pairingCode } = do
-        device <- query @Device |> filterWhere (#pairingCode, Just pairingCode) |> fetchOne
+        device <- query @Device
+            |> filterWhere (#pairingCode, Just pairingCode)
+            |> filterWhere (#enabled, True)
+            |> fetchOne
 
         -- Pairing can only happen once, so we need to remove the pairing code from the Device.
         device <- device
