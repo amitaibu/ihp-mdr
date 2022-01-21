@@ -5,5 +5,6 @@ CREATE TABLE devices (
     created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW() NOT NULL,
     pairing_code TEXT DEFAULT NULL UNIQUE,
     refresh_token TEXT NOT NULL UNIQUE,
-    name INT NOT NULL UNIQUE
+    name INT NOT NULL UNIQUE,
+    enabled BOOLEAN DEFAULT true NOT NULL
 );

@@ -17,7 +17,9 @@ instance View EditView where
 
 renderForm :: Device -> Html
 renderForm device = formFor device [hsx|
-    {(textField #name)}
+    {(textField #name) {disabled = True}}
+    {(checkboxField #enabled)}
+
     {submitButton}
 
 |]

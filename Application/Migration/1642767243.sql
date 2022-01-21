@@ -1,0 +1,2 @@
+ALTER TABLE devices ADD COLUMN enabled BOOLEAN DEFAULT true NOT NULL;
+ALTER TABLE devices ADD CONSTRAINT devices_name_key UNIQUE(name);
