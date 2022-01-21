@@ -10,4 +10,8 @@
   a {
     @apply text-blue-600 hover:underline;
   }
+
+  input:disabled {
+    @apply bg-gray-200;
+  }
 }

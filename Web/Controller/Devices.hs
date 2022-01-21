@@ -60,7 +60,7 @@ instance Controller DevicesController where
         setSuccessMessage "Device deleted"
         redirectTo DevicesAction
 
-    action CreatePairDeviceAction { pairingCode } = do
+    action PairDeviceAction { pairingCode } = do
         device <- query @Device
             |> filterWhere (#pairingCode, Just pairingCode)
             |> filterWhere (#enabled, True)
@@ -86,6 +86,4 @@ instance ToJSON Device where
 
 
 buildDevice device = device
-    |> fill @["name", "pairingCode", "token", "refreshToken", "enabled"]
-    -- Make sure name is at least 3 digits long.
-    |> validateField #name (isGreaterThan 99)
+    |> fill @["pairingCode", "token", "refreshToken", "enabled"]

@@ -18,5 +18,5 @@ data DevicesController
     | UpdateDeviceAction { deviceId :: !(Id Device) }
     | DeleteDeviceAction { deviceId :: !(Id Device) }
     -- Pairing a device.
-    | CreatePairDeviceAction { pairingCode :: !Text }
+    | PairDeviceAction { pairingCode :: !Text }
     deriving (Eq, Show, Data)
