@@ -86,4 +86,6 @@ instance ToJSON Device where
 
 
 buildDevice device = device
-    |> fill @["pairingCode", "token", "refreshToken", "enabled"]
+    |> fill @["name", "pairingCode", "token", "refreshToken", "enabled"]
+    -- Make sure name is at least 3 digits long.
+    |> validateField #name (isGreaterThan 99)
