@@ -1,2 +1,0 @@
-ALTER TABLE devices ADD COLUMN name TEXT NOT NULL;
-ALTER TABLE devices ADD CONSTRAINT devices_name_key UNIQUE(name);

@@ -17,7 +17,7 @@ instance View NewView where
 
 renderForm :: Device -> Html
 renderForm device = formFor device [hsx|
-    {(numberField #name)}
+    {(textField #name)}
     {(checkboxField #enabled)}
 
     {(hiddenField #token)}

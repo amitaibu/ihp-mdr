@@ -1,2 +1,0 @@
-ALTER TABLE devices DROP COLUMN name;
-ALTER TABLE devices ADD COLUMN name INT NOT NULL;

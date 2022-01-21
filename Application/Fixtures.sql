@@ -16,8 +16,12 @@ SET SESSION AUTHORIZATION DEFAULT;
 
 ALTER TABLE public.devices DISABLE TRIGGER ALL;
 
-
-
 ALTER TABLE public.devices ENABLE TRIGGER ALL;
+
+
+ALTER TABLE public.schema_migrations DISABLE TRIGGER ALL;
+
+ALTER TABLE public.schema_migrations ENABLE TRIGGER ALL;
+
 
 
