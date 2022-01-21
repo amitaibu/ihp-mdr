@@ -10,11 +10,11 @@ instance AutoRoute DevicesController
 instance HasPath DevicesController where
     pathTo DevicesAction = "/Devices"
     pathTo NewDeviceAction = "/NewDevice"
-    pathTo ShowDeviceAction { deviceId } = "/ShowDevice/" ++ tshow deviceId
+    pathTo ShowDeviceAction { deviceId } = "/ShowDevice?deviceId=" ++ tshow deviceId
     pathTo CreateDeviceAction = "/CreateDevice"
-    pathTo EditDeviceAction { deviceId  } = "/EditDevice/" ++ tshow deviceId
-    pathTo UpdateDeviceAction { deviceId } = "/UpdateDevice/" ++ tshow deviceId
-    pathTo DeleteDeviceAction { deviceId } = "/DeleteDevice/" ++ tshow deviceId
+    pathTo EditDeviceAction { deviceId  } = "/EditDevice?deviceId=" ++ tshow deviceId
+    pathTo UpdateDeviceAction { deviceId } = "/UpdateDevice?deviceId=" ++ tshow deviceId
+    pathTo DeleteDeviceAction { deviceId } = "/DeleteDevice?deviceId=" ++ tshow deviceId
     pathTo CreatePairDeviceAction { pairingCode } = "/api/pairing-code/" ++ tshow pairingCode
 
 instance CanRoute DevicesController where
@@ -32,7 +32,7 @@ instance CanRoute DevicesController where
            pure NewDeviceAction
 
        let showDevice = do
-           string "/ShowDevice/"
+           string "/ShowDevice?deviceId="
            deviceId <- parseId
            optional "/"
            endOfInput
@@ -45,21 +45,21 @@ instance CanRoute DevicesController where
            pure CreateDeviceAction
 
        let editDevice = do
-           string "/EditDevice/"
+           string "/EditDevice?deviceId="
            deviceId <- parseId
            optional "/"
            endOfInput
            pure EditDeviceAction { deviceId }
 
        let updateDevice = do
-           string "/UpdateDevice/"
+           string "/UpdateDevice?deviceId="
            deviceId <- parseId
            optional "/"
            endOfInput
            pure UpdateDeviceAction { deviceId }
 
        let deleteDevice = do
-           string "/DeleteDevice/"
+           string "/DeleteDevice?deviceId="
            deviceId <- parseId
            optional "/"
            endOfInput

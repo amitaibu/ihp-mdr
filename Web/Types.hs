@@ -17,6 +17,6 @@ data DevicesController
     | EditDeviceAction { deviceId :: !(Id Device) }
     | UpdateDeviceAction { deviceId :: !(Id Device) }
     | DeleteDeviceAction { deviceId :: !(Id Device) }
-    -- Pairing a device, using the legacy "/api/pairing-code" URL.
+    -- Pairing a device.
     | CreatePairDeviceAction { pairingCode :: !Text }
     deriving (Eq, Show, Data)
