@@ -7,5 +7,6 @@ CREATE TABLE devices (
     refresh_token TEXT NOT NULL UNIQUE,
     name TEXT NOT NULL UNIQUE,
     enabled BOOLEAN DEFAULT true NOT NULL,
-    last_used TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+    last_used TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+    numeric_id SERIAL NOT NULL UNIQUE
 );
