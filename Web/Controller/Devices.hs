@@ -77,7 +77,8 @@ instance ToJSON Device where
     toJSON device = object
         [ "data" .= object
             [ "id" .= get #id device
-            , "device_id" .= get #name device
+            , "device_id" .= get #numericId device
+            , "device_name" .= get #name device
             , "access_token" .= get #token device
             , "refresh_token" .= get #refreshToken device
             , "created_at" .= get #createdAt device
