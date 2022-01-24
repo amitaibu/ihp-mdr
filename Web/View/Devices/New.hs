@@ -1,7 +1,9 @@
 module Web.View.Devices.New where
 import Web.View.Prelude
 
-data NewView = NewView { device :: Device }
+data NewView = NewView
+    { device :: Device
+    }
 
 instance View NewView where
     html NewView { .. } = [hsx|
@@ -26,3 +28,4 @@ renderForm device = formFor device [hsx|
     {submitButton}
 
 |]
+

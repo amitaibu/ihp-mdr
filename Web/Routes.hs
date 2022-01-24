@@ -81,3 +81,8 @@ instance AutoRoute DevicesController
 --             <|> updateDevice
 --             <|> deleteDevice
 --             <|> pairDeviceAction
+instance AutoRoute NursesController
+
+
+instance AutoRoute AuthoritiesController
+
