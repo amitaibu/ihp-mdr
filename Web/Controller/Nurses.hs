@@ -47,7 +47,7 @@ instance Controller NursesController where
             |> filterWhere (#nurseId, nurseId)
             |> fetch
 
-        let authorityIds = map (get #authorityId) nurseAuthorityRefs
+        let selectedAuthorityIds = map (get #authorityId) nurseAuthorityRefs
 
         nurse <- fetch nurseId
         render EditView { .. }
@@ -57,7 +57,7 @@ instance Controller NursesController where
             |> filterWhere (#nurseId, nurseId)
             |> fetch
 
-        let authorityIds = map (get #authorityId) nurseAuthorityRefs
+        let selectedAuthorityIds = map (get #authorityId) nurseAuthorityRefs
 
         nurse <- fetch nurseId
         nurse
@@ -71,8 +71,7 @@ instance Controller NursesController where
 
                     -- Update the multiple refs. We first delete existing ones, and
                     -- then we'll recreate.
-                    deleteRecordByIds (ids nurseAuthorityRefs)
-
+                    deleteRecords nurseAuthorityRefs
 
                     let authorities = paramList @UUID "authorities"
                     forEach authorities $ \authorityId -> do
