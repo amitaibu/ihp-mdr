@@ -41,17 +41,47 @@ instance Controller NursesController where
         render ShowView { .. }
 
     action EditNurseAction { nurseId } = do
+        authorities <- query @Authority |> fetch
+
+        nurseAuthorityRefs <- query @NurseAuthorityRef
+            |> filterWhere (#nurseId, nurseId)
+            |> fetch
+
+        let authorityIds = map (get #authorityId) nurseAuthorityRefs
+
         nurse <- fetch nurseId
         render EditView { .. }
 
     action UpdateNurseAction { nurseId } = do
+        nurseAuthorityRefs <- query @NurseAuthorityRef
+            |> filterWhere (#nurseId, nurseId)
+            |> fetch
+
+        let authorityIds = map (get #authorityId) nurseAuthorityRefs
+
         nurse <- fetch nurseId
         nurse
             |> buildNurse
             |> ifValid \case
-                Left nurse -> render EditView { .. }
+                Left nurse -> do
+                    authorities <- query @Authority |> fetch
+                    render EditView { .. }
                 Right nurse -> do
                     nurse <- nurse |> updateRecord
+
+                    -- Update the multiple refs. We first delete existing ones, and
+                    -- then we'll recreate.
+                    deleteRecordByIds (ids nurseAuthorityRefs)
+
+
+                    let authorities = paramList @UUID "authorities"
+                    forEach authorities $ \authorityId -> do
+                        let nurseAuthorityRef = newRecord @NurseAuthorityRef
+                                |> set #nurseId (get #id nurse)
+                                |> set #authorityId (Id authorityId)
+                        nurseAuthorityRef |> createRecord
+                        pure ()
+
                     setSuccessMessage "Nurse updated"
                     redirectTo EditNurseAction { .. }
 
