@@ -3,7 +3,7 @@ import Web.View.Prelude
 import Web.View.Nurses.Prelude ( selectAuthorities )
 
 data EditView = EditView
-    { nurse :: Nurse
+    { nurse :: Include "nurseAuthorityRefs" Nurse
     , authorities :: [ Authority ]
 
     -- The selected authorities.
@@ -15,6 +15,15 @@ instance View EditView where
         {breadcrumb}
         <h1>Edit Nurse</h1>
         {renderForm nurse authorities selectedAuthorityIds}
+
+
+        Errors: {getValidationFailure #nurseAuthorityRefs nurse}
+
+        <div>
+            {get #nurseAuthorityRefs nurse}
+        </div>
+
+
     |]
         where
             breadcrumb = renderBreadcrumb
@@ -22,7 +31,7 @@ instance View EditView where
                 , breadcrumbText "Edit Nurse"
                 ]
 
-renderForm :: Nurse -> [ Authority ] -> [ Id Authority ] -> Html
+renderForm :: Include "nurseAuthorityRefs" Nurse -> [ Authority ] -> [ Id Authority ] -> Html
 renderForm nurse authorities selectedAuthorityIds = formFor nurse [hsx|
     {(textField #name)}
     {(textField #pinCode)}

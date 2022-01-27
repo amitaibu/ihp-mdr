@@ -49,7 +49,11 @@ instance Controller NursesController where
 
         let selectedAuthorityIds = map (get #authorityId) nurseAuthorityRefs
 
-        nurse <- fetch nurseId
+        nurseZ <- fetch nurseId
+            >>= fetchRelated #nurseAuthorityRefs
+
+        let nurse = nurseZ |> attachFailure #nurseAuthorityRefs "Invalid value"
+
         render EditView { .. }
 
     action UpdateNurseAction { nurseId } = do
@@ -60,14 +64,19 @@ instance Controller NursesController where
         let selectedAuthorityIds = map (get #authorityId) nurseAuthorityRefs
 
         nurse <- fetch nurseId
+
         nurse
             |> buildNurse
             |> ifValid \case
                 Left nurse -> do
+                    nurse <- fetch nurseId
+                        >>= fetchRelated #nurseAuthorityRefs
+
                     authorities <- query @Authority |> fetch
                     render EditView { .. }
                 Right nurse -> do
                     nurse <- nurse |> updateRecord
+                        >>= fetchRelated #nurseAuthorityRefs
 
                     -- Update the multiple refs. We first delete existing ones, and
                     -- then we'll recreate.
